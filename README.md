@@ -1,5 +1,10 @@
 # LMS Pro - Library Management System
 
+[![Release](https://img.shields.io/github/v/release/shiroonigami23-ui/lms-pro?label=release)](https://github.com/shiroonigami23-ui/lms-pro/releases)
+[![Downloads](https://img.shields.io/github/downloads/shiroonigami23-ui/lms-pro/total?label=downloads)](https://github.com/shiroonigami23-ui/lms-pro/releases)
+[![Android APK](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://github.com/shiroonigami23-ui/lms-pro/releases/latest/download/LMSPro-android-debug.apk)
+[![Windows EXE](https://img.shields.io/badge/Windows-EXE-0078D6?logo=windows&logoColor=white)](https://github.com/shiroonigami23-ui/lms-pro/releases/latest/download/LMSPro-windows.zip)
+
 ![LMS Pro Banner](https://socialify.git.ci/shiroonigami23-ui/lms-pro/image?description=1&descriptionEditable=Responsive%20Library%20Management%20System%20for%20institutions%20and%20school%20projects.&font=Raleway&forks=1&issues=1&language=1&name=1&pattern=Floating%20Cogs&stargazers=1&theme=Dark)
 
 ![LMS Pro Demo](lms_demo.gif)
@@ -75,6 +80,11 @@ This project is a hosted web app. Android and Windows distributions are generate
 
 - Android: TWA/Bubblewrap flow.
 - Windows: Nativefier/Electron wrapper.
+
+Latest release assets:
+
+- APK: `LMSPro-android-debug.apk`
+- EXE package: `LMSPro-windows.zip`
 
 See `builds/README.md` for exact commands.
 
