@@ -1,9 +1,13 @@
-const CACHE_NAME = "lms-pro-v2";
+const CACHE_NAME = "lms-pro-v3";
 const urlsToCache = [
   "./index.php",
   "./user_login.php",
   "./signup.php",
   "./about_us.php",
+  "./manifest.webmanifest",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/icon-512-maskable.png",
   "../bootstrap-4.4.1/css/bootstrap.min.css"
 ];
 

@@ -3,39 +3,95 @@ session_start();
 $appConfig = require __DIR__ . '/../config/app.php';
 require_once __DIR__ . '/../config/database.php';
 $connection = lms_db_connect($appConfig['db']);
-?>
 
+$loginMessage = '';
+$loginType = 'danger';
+$redirectTo = '';
+
+if (isset($_POST['login'])) {
+    $email = trim((string)($_POST['email'] ?? ''));
+    $password = (string)($_POST['password'] ?? '');
+
+    if ($email === '' || $password === '') {
+        $loginMessage = 'Please enter both email and password.';
+        $loginType = 'warning';
+    } else {
+        $userStmt = mysqli_prepare($connection, 'SELECT id, name, email, password FROM users WHERE email = ? LIMIT 1');
+        if ($userStmt) {
+            mysqli_stmt_bind_param($userStmt, 's', $email);
+            mysqli_stmt_execute($userStmt);
+            $userResult = mysqli_stmt_get_result($userStmt);
+            $userRow = mysqli_fetch_assoc($userResult);
+            mysqli_stmt_close($userStmt);
+
+            if ($userRow) {
+                $userPassOk = password_verify($password, $userRow['password']) || $userRow['password'] === $password;
+                if ($userPassOk) {
+                    $_SESSION['id'] = $userRow['id'];
+                    $_SESSION['name'] = $userRow['name'];
+                    $_SESSION['email'] = $userRow['email'];
+                    $redirectTo = 'user_dashboard.php';
+                } else {
+                    $loginMessage = 'Invalid email or password.';
+                }
+            }
+        }
+
+        if ($redirectTo === '') {
+            $adminStmt = mysqli_prepare($connection, 'SELECT id, name, email, password FROM admins WHERE email = ? LIMIT 1');
+            if ($adminStmt) {
+                mysqli_stmt_bind_param($adminStmt, 's', $email);
+                mysqli_stmt_execute($adminStmt);
+                $adminResult = mysqli_stmt_get_result($adminStmt);
+                $adminRow = mysqli_fetch_assoc($adminResult);
+                mysqli_stmt_close($adminStmt);
+
+                if ($adminRow) {
+                    $adminPassOk = password_verify($password, $adminRow['password']) || $adminRow['password'] === $password;
+                    if ($adminPassOk) {
+                        $_SESSION['id'] = $adminRow['id'];
+                        $_SESSION['name'] = $adminRow['name'];
+                        $_SESSION['email'] = $adminRow['email'];
+                        $redirectTo = '../Admin/admin_dashboard.php';
+                    } else {
+                        $loginMessage = 'Invalid email or password.';
+                    }
+                }
+            }
+        }
+
+        if ($redirectTo === '' && $loginMessage === '') {
+            $loginMessage = 'Invalid email or password.';
+        }
+    }
+}
+
+if ($redirectTo !== '') {
+    header('Location: ' . $redirectTo);
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>User Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
     <style type="text/css">
         body {
             background: linear-gradient(to right, #667eea, #764ba2);
             font-family: Arial, sans-serif;
         }
-
         #login-box {
             background-color: rgba(255, 255, 255, 0.7);
             padding: 20px;
             border-radius: 10px;
             animation: fadeInRight 1s;
         }
-
         #sidebar-content {
             background-color: rgba(255, 255, 255, 0.7);
             padding: 20px;
@@ -43,7 +99,6 @@ $connection = lms_db_connect($appConfig['db']);
             animation: fadeInLeft 1s;
             height: 90%;
         }
-
         @media (max-width: 768px) {
             #login-box,
             #sidebar-content {
@@ -51,31 +106,26 @@ $connection = lms_db_connect($appConfig['db']);
                 height: auto;
             }
         }
-
         @keyframes fadeInLeft {
             from {
                 opacity: 0;
                 transform: translateX(-50px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
             }
         }
-
         @keyframes fadeInRight {
             from {
                 opacity: 0;
                 transform: translateX(50px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
             }
         }
-
         .form-control {
             border-radius: 20px;
             border: none;
@@ -83,51 +133,41 @@ $connection = lms_db_connect($appConfig['db']);
             padding: 15px;
             margin-bottom: 20px;
         }
-
         .btn-primary {
             border-radius: 20px;
             padding: 12px 30px;
             background-color: #6c63ff;
             border: none;
         }
-
         .btn-primary:hover {
             background-color: #534bff;
         }
-
         .btn-warning {
             border-radius: 20px;
             padding: 12px 30px;
             background-color: #ffcc00;
             border: none;
         }
-
         .btn-warning:hover {
             background-color: #e6b800;
         }
         @media (max-width: 768px) {
-        #sidebar-content {
-            height: auto;
-            max-height: none; /* Reset max-height for smaller screens */
-            overflow-y: visible; /* Show full content without scroll on smaller screens */
+            #sidebar-content {
+                height: auto;
+                max-height: none;
+                overflow-y: visible;
+            }
         }
-    }
-
     </style>
 </head>
-
 <body>
-<?php include('navbar_home.php') ?>
-
-    <!-- Marquee -->
+<?php include('navbar_home.php'); ?>
     <marquee style="background-color: lightblue;">
         <b>Attention Users !!! Your login form is here, Please fill the correct credentials to log-in for your LMS
             activities.</b>
     </marquee>
-
     <div class="container">
         <div class="row">
-            <!-- Sidebar content -->
             <div class="col-md-6">
                 <div id="sidebar-content">
                     <h5>Library Timing</h5>
@@ -147,104 +187,30 @@ $connection = lms_db_connect($appConfig['db']);
                     </ul>
                 </div>
             </div>
-
-            <!-- Login box -->
             <div class="col-md-6">
                 <div id="login-box">
-                    <!-- Your login form content here -->
                     <h3><i class="fas fa-sign-in-alt"></i> User Login</h3>
                     <form action="" method="post">
                         <div class="form-group">
                             <input type="text" name="email" class="form-control" placeholder="Email ID" required>
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" class="form-control" placeholder="Password"
-                                required>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required>
                         </div>
                         <button type="submit" name="login" class="btn btn-primary">Sign In</button>
                         <a class="btn btn-warning" href="signup.php">Sign Up</a>
                         <br><br>
                         <a href="forgot_password.php" style="color:red">Forgot Password?</a>
                     </form>
-
-
-                    <?php
-			if (isset($_POST['login'])) {
-
-				$email = mysqli_real_escape_string($connection, $_POST['email']);
-				$query = "select * from users where email = '$email' limit 1";
-				$query_run = mysqli_query($connection, $query);
-                $row = mysqli_fetch_assoc($query_run);
-
-                if ($row) {
-                    $passOk = false;
-                    if (password_verify($_POST['password'], $row['password'])) {
-                        $passOk = true;
-                    } elseif ($row['password'] === $_POST['password']) {
-                        $passOk = true;
-                    }
-
-                    if ($passOk && (int)$row['Role'] === 0) {
-                        $_SESSION['name'] = $row['name'];
-                        $_SESSION['email'] = $row['email'];
-                        $_SESSION['id'] = $row['id'];
-                        ?>
-                        <script type="text/javascript">toastr.success('Login successful');window.location.href = "user_dashboard.php";</script>
-                        <?php
-                    } elseif ($passOk) {
-                        $_SESSION['name'] = $row['name'];
-                        $_SESSION['email'] = $row['email'];
-                        $_SESSION['id'] = $row['id'];
-                        ?>
-                        <script type="text/javascript">toastr.success('Login successful');window.location.href = "../Admin/admin_dashboard.php";</script>
-                        <?php
-                    } else {
-                        ?>
-                        <script type="text/javascript">toastr.error('Invalid password');</script>
-                        <?php
-                    }
-                } else {
-                    ?>
-                    <script type="text/javascript">toastr.info('Email not registered');</script>
-                    <?php
-                }
-			}
-			?>
-		</div>
-	</div>
-
-                    
+                    <?php if ($loginMessage !== ''): ?>
+                        <div class="alert alert-<?php echo htmlspecialchars($loginType); ?> mt-3 mb-0"><?php echo htmlspecialchars($loginMessage); ?></div>
+                    <?php endif; ?>
                 </div>
             </div>
-            
-
         </div>
     </div>
-
-
-
-
-
-
-	
-
-
-
-
-
-
-    <!-- Footer -->
-    <?php include('footer.php') ?>
-
-    <!-- Optional: Include Bootstrap and other scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"
-        integrity="sha512-BJFZgVtXesqGyBA0xWzWnuYjnMO6I5gmvXJlba0//fPs9QxK8feGpNtW+4FtLv0AxJOM3lF6+b0/FMsIrkxfJQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+    <?php include('footer.php'); ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap-4.4.1/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

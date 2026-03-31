@@ -39,7 +39,6 @@
           <a href="<?php echo htmlspecialchars($appConfig['social']['github']); ?>" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fa-brands fa-github"></i></a>
           <a href="<?php echo htmlspecialchars($appConfig['social']['leetcode']); ?>" target="_blank" rel="noopener noreferrer" title="LeetCode"><i class="fa-solid fa-code"></i></a>
         </div>
-        <small class="text-light">Facebook and Instagram links removed as requested.</small>
       </div>
       <div class="col-md-2 mb-3">
         <h6 class="text-uppercase fw-bold mb-3">Contact</h6>
