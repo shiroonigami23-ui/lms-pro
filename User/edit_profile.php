@@ -6,9 +6,10 @@ if(!isset($_SESSION['email']))
 }
 
 	#fetch data from database
-	$connection = mysqli_connect("localhost", "root", "");
-	$db = mysqli_select_db($connection, "lms");
-	$id="";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$id="";
 	$name = "";
 	$course="";
 	$department="";
@@ -34,9 +35,9 @@ if(!isset($_SESSION['email']))
 	<title>Dashboard</title>
 	
 	<meta charset="utf-8" name="viewport" content="width=device-width,intial-scale=1">
-	<link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-  	<script type="text/javascript" src="bootstrap-4.4.1/js/juqery_latest.js"></script>
-  	<script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
+  	<script type="text/javascript" src="../bootstrap-4.4.1/js/juqery_latest.js"></script>
+  	<script type="text/javascript" src="../bootstrap-4.4.1/js/bootstrap.min.js"></script>
 	<style>
 		   body {
             background-image: linear-gradient(to right, #fc5c7d, #6a82fb);

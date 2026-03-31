@@ -4,8 +4,9 @@ if(!isset($_SESSION['email']))
 {
 	header("location:user_login.php");
 }
-$connection = mysqli_connect("localhost", "root", "");
-$db = mysqli_select_db($connection, "lms");
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
 $query = "select * from issued_books where book_no= $_GET[bn]";
 	$query_run = mysqli_query($connection,$query);
 if($row['dues_status'] == "Paid")

@@ -16,6 +16,8 @@ if (isset($_POST['login'])) {
         $loginMessage = 'Please enter both email and password.';
         $loginType = 'warning';
     } else {
+        $userFound = false;
+        $adminFound = false;
         $userStmt = mysqli_prepare($connection, 'SELECT id, name, email, password FROM users WHERE email = ? LIMIT 1');
         if ($userStmt) {
             mysqli_stmt_bind_param($userStmt, 's', $email);
@@ -25,6 +27,7 @@ if (isset($_POST['login'])) {
             mysqli_stmt_close($userStmt);
 
             if ($userRow) {
+                $userFound = true;
                 $userPassOk = password_verify($password, $userRow['password']) || $userRow['password'] === $password;
                 if ($userPassOk) {
                     $_SESSION['id'] = $userRow['id'];
@@ -47,6 +50,7 @@ if (isset($_POST['login'])) {
                 mysqli_stmt_close($adminStmt);
 
                 if ($adminRow) {
+                    $adminFound = true;
                     $adminPassOk = password_verify($password, $adminRow['password']) || $adminRow['password'] === $password;
                     if ($adminPassOk) {
                         $_SESSION['id'] = $adminRow['id'];
@@ -61,7 +65,10 @@ if (isset($_POST['login'])) {
         }
 
         if ($redirectTo === '' && $loginMessage === '') {
-            $loginMessage = 'Invalid email or password.';
+            $loginMessage = 'No account found with this email. Please sign up first.';
+            if (!empty($userFound) || !empty($adminFound)) {
+                $loginMessage = 'Invalid email or password.';
+            }
         }
     }
 }

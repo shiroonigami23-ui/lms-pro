@@ -13,9 +13,9 @@ if(!isset($_SESSION['email']))
 	<title>Dashboard</title>
 	
 	<meta charset="utf-8" name="viewport" content="width=device-width,intial-scale=1">
-	<link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-  	<script type="text/javascript" src="bootstrap-4.4.1/js/juqery_latest.js"></script>
-  	<script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
+  	<script type="text/javascript" src="../bootstrap-4.4.1/js/juqery_latest.js"></script>
+  	<script type="text/javascript" src="../bootstrap-4.4.1/js/bootstrap.min.js"></script>
 	<style>
 		 body {
             background-image: linear-gradient(-120deg, #d4fc79 0%, #96e6a1 100%);
@@ -141,9 +141,10 @@ if(!isset($_SESSION['email']))
 
 <?php
 if (isset($_POST['Feedback'])) {
-	$connection = mysqli_connect("localhost", "root", "");
-	$db = mysqli_select_db($connection, "lms");
-	$query = "insert into feedback values(NULL,'$_POST[name]','$_POST[roll]',current_date,'$_POST[category]','$_POST[feedback]','N/A')";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$query = "insert into feedback values(NULL,'$_POST[name]','$_POST[roll]',current_date,'$_POST[category]','$_POST[feedback]','N/A')";
 	$query_run = mysqli_query($connection, $query);
 	if(	$query_run){
 	?>

@@ -1,9 +1,8 @@
 <?php
 session_start();
-$msg = '';
-if (isset($_SESSION['email_alert'])) {
-    $msg = "Email already exists. Please use another email.";
-}
+$msg = (string)($_SESSION['register_message'] ?? '');
+$msgType = (string)($_SESSION['register_type'] ?? 'warning');
+unset($_SESSION['register_message'], $_SESSION['register_type'], $_SESSION['email_alert']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +49,7 @@ if (isset($_SESSION['email_alert'])) {
             <div class="panel p-4">
                 <h3 class="mb-3">Student Registration</h3>
                 <?php if ($msg !== ''): ?>
-                    <div class="alert alert-warning"><?php echo htmlspecialchars($msg); ?></div>
+                    <div class="alert alert-<?php echo htmlspecialchars($msgType); ?>"><?php echo htmlspecialchars($msg); ?></div>
                 <?php endif; ?>
                 <form action="register.php" method="post">
                     <div class="form-row">
@@ -87,6 +86,16 @@ if (isset($_SESSION['email_alert'])) {
                         <label>Address</label>
                         <textarea name="address" class="form-control" rows="3" required></textarea>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" minlength="6" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control" minlength="6" required>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary">Register</button>
                     <button type="reset" class="btn btn-outline-secondary">Reset</button>
                 </form>
@@ -97,4 +106,3 @@ if (isset($_SESSION['email_alert'])) {
 <?php include('footer.php'); ?>
 </body>
 </html>
-<?php unset($_SESSION['email_alert']); ?>

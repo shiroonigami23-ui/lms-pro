@@ -5,8 +5,9 @@ session_start();
 // 	die("Access denied");
 // }
 require('functions.php');
-$connection = mysqli_connect("localhost", "root", "");
-$db = mysqli_select_db($connection, "lms");
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
 ?>
 $query = "select * from request_books where student_id='$_SESSION[id]'";
 ?>
@@ -16,9 +17,9 @@ $query = "select * from request_books where student_id='$_SESSION[id]'";
 	<title>Dashboard</title>
 	    <link rel="icon" href="https://e7.pngegg.com/pngimages/606/201/png-clipart-mississauga-library-system-school-library-public-library-online-public-access-catalog-library-miscellaneous-trademark-thumbnail.png" type="image/x
 	<meta charset="utf-8" name="viewport" content="width=device-width,intial-scale=1">
-	<link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-  	<script type="text/javascript" src="bootstrap-4.4.1/js/juqery_latest.js"></script>
-  	<script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
+  	<script type="text/javascript" src="../bootstrap-4.4.1/js/juqery_latest.js"></script>
+  	<script type="text/javascript" src="../bootstrap-4.4.1/js/bootstrap.min.js"></script>
 	<style>
 		body {
 			background: rgb(34,193,195);
@@ -167,7 +168,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#22c1c3",endCo
 		</div>
 		<div class="row justify-content-center mt-4">
 		<div class="col-lg-4">
-    <a class="btn btn-warning btn-block btn-download" href="downloads/down_requests.php" target="_blank">Download list</a>
+    <a class="btn btn-warning btn-block btn-download" href="../downloads/down_requests.php" target="_blank">Download list</a>
 </div>
 
 		</div>

@@ -6,9 +6,10 @@ if(!isset($_SESSION['email']))
 }
 
 	#fetch data from database
-				$connection = mysqli_connect("localhost", "root", "");
-				$db = mysqli_select_db($connection, "lms");
-	$book_name = "";
+				$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$book_name = "";
 	$author_name= "";
 	$category = "";
 	$book_no = "";
@@ -21,9 +22,9 @@ if(!isset($_SESSION['email']))
 <head>
     <title>All Reg Books</title>
     <meta charset="utf-8" name="viewport" content="width=device-width,intial-scale=1">
-    <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-    <script type="text/javascript" src="bootstrap-4.4.1/js/juqery_latest.js"></script>
-    <script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap-4.4.1/js/juqery_latest.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.4.1/js/bootstrap.min.js"></script>
     <style>
         body{
             background-image: linear-gradient(-120deg, #d4fc79 0%, #96e6a1 100%);
@@ -154,7 +155,7 @@ if(!isset($_SESSION['email']))
         </div>
         <br>
         <center>
-			<a class="btn btn-warning" href="downloads/down_avail.php" target="_blank">Download list</a>
+			<a class="btn btn-warning" href="../downloads/down_avail.php" target="_blank">Download list</a>
 		</center>
 		<br><br>
     </div>

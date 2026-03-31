@@ -34,7 +34,7 @@ if (isset($_POST['forgot_password'])) {
 <head>
     <title>Forgot Password</title>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
 </head>
 <body style="background: linear-gradient(to right, #0ea5e9, #1e3a8a);">
 <?php include('navbar_home.php') ?>

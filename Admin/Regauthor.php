@@ -1,6 +1,7 @@
 <?php
-$connection = mysqli_connect("localhost", "root", " ");
-$db = mysqli_select_db($connection, "lms");
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
 session_start();
 if (!isset($_SESSION['email'])) {
 	

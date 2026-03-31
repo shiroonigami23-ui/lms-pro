@@ -8,10 +8,11 @@ if(!isset($_SESSION['email']))
 require('../pdf/fpdf.php');
 function connectDB()
 {
-    $host = 'localhost';
-    $username = 'root';
-    $password = '';
-    $dbname = 'lms';
+    $appConfig = require __DIR__ . '/../config/app.php';
+    $host = $appConfig['db']['host'];
+    $username = $appConfig['db']['user'];
+    $password = $appConfig['db']['pass'];
+    $dbname = $appConfig['db']['name'];
 
     try {
         $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -24,7 +25,8 @@ function connectDB()
 function getAdminData()
 {
     $conn = connectDB();
-    $stmt = $conn->prepare("select name,email,mobile from admins where email='$_SESSION[email]'");
+    $stmt = $conn->prepare("select name,email,mobile from admins where email=:email");
+    $stmt->bindValue(':email', $_SESSION['email'], PDO::PARAM_STR);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
@@ -91,9 +93,9 @@ foreach ($availList as $avail) {
 
     $pdf->Cell(40, 10, $avail['name'], 1);
     $pdf->Cell(40, 10, $avail['roll'], 1);
-    $pdf->Cell(30, 10, $avail['feed_date'], 1);
+    $pdf->Cell(30, 10, $avail['date'], 1);
     $pdf->Cell(30, 10, $avail['category'], 1);
-    $pdf->Cell(30, 10, $avail['message'], 1);
+    $pdf->Cell(30, 10, $avail['feedback'], 1);
     $pdf->Ln();
 }
 $pdf->Output('books_list.pdf', 'I');

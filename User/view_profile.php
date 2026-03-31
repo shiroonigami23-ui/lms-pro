@@ -32,9 +32,9 @@ while ($row = mysqli_fetch_assoc($query_run)) {
 <head>
 	<title>Dashboard</title>
 	<meta charset="utf-8" name="viewport" content="width=device-width,intial-scale=1">
-	<link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-	<script type="text/javascript" src="bootstrap-4.4.1/js/juqery_latest.js"></script>
-	<script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
+	<script type="text/javascript" src="../bootstrap-4.4.1/js/juqery_latest.js"></script>
+	<script type="text/javascript" src="../bootstrap-4.4.1/js/bootstrap.min.js"></script>
 	<style>
 		body{
 			background-image: linear-gradient(-120deg, #d4fc79 0%, #96e6a1 100%);
@@ -42,7 +42,7 @@ while ($row = mysqli_fetch_assoc($query_run)) {
 		background-attachment: fixed;
 		background-repeat: no-repeat;
 		}
-	</style
+	</style>
 </head>
 
 <body  style="background-color:grey">
@@ -89,7 +89,7 @@ while ($row = mysqli_fetch_assoc($query_run)) {
 					<label for="email">Address:</label>
 					<input type="text" value="<?php echo $address; ?>" class="form-control" disabled>
 				</div>
-<center>				<a class="btn btn-warning" href="downloads/down_user_id.php" target="_blank">Download E-ID Card</a></center>
+<center>				<a class="btn btn-warning" href="../downloads/down_user_id.php" target="_blank">Download E-ID Card</a></center>
 <br><br>
 			</form>
 		</div>

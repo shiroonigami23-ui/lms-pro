@@ -6,18 +6,19 @@ if(!isset($_SESSION['email']))
 }
 
 	#fetch data from database
-	$connection = mysqli_connect("localhost", "root", "");
-	$db = mysqli_select_db($connection, "lms");
-	$query = "select * from feedback where roll='$_SESSION[id]';";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$query = "select * from feedback where roll='$_SESSION[id]';";
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Feedback Responses</title>
     <meta charset="utf-8" name="viewport" content="width=device-width,intial-scale=1">
-    <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
-    <script type="text/javascript" src="bootstrap-4.4.1/js/juqery_latest.js"></script>
-    <script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bootstrap-4.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="../bootstrap-4.4.1/js/juqery_latest.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.4.1/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -142,7 +143,7 @@ if(!isset($_SESSION['email']))
     ?>
 </div>
 <br>
-<center><a class="btn-download-list" href="downloads/down_dues.php" target="_blank">Download list</a></center>
+<center><a class="btn-download-list" href="../downloads/down_dues.php" target="_blank">Download list</a></center>
 <br><br>
 </body>
 </html>
