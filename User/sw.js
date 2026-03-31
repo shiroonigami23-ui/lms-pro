@@ -1,11 +1,10 @@
-const CACHE_NAME = "lms-pro-v1";
+const CACHE_NAME = "lms-pro-v2";
 const urlsToCache = [
-  "./",
   "./index.php",
   "./user_login.php",
   "./signup.php",
   "./about_us.php",
-  "./bootstrap-4.4.1/css/bootstrap.min.css"
+  "../bootstrap-4.4.1/css/bootstrap.min.css"
 ];
 
 self.addEventListener("install", (event) => {

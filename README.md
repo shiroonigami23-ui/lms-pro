@@ -65,6 +65,10 @@ Use this structure exactly:
 Then clear browser cache and reopen:
 `https://sobran.lovestoblog.com/library/`
 
+Quick verification endpoint:
+`https://sobran.lovestoblog.com/library/LIVE_CHECK.php`
+Expected text: `LMS_PRO_DEPLOY_OK`
+
 ## Packaging
 
 This project is a hosted web app. Android and Windows distributions are generated as wrappers:

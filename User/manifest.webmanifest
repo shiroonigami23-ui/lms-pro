@@ -1,7 +1,7 @@
 {
   "name": "LMS Pro",
   "short_name": "LMS Pro",
-  "start_url": "/library/",
+  "start_url": "/library/User/index.php",
   "display": "standalone",
   "background_color": "#0b132b",
   "theme_color": "#0ea5e9",
