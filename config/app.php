@@ -1,5 +1,5 @@
 <?php
-return [
+$config = [
     'app_name' => 'LMS Pro',
     'owner_name' => 'Shirooni23k',
     'owner_email' => 'shiroonigami23@gmail.com',
@@ -13,9 +13,23 @@ return [
     'db' => [
         'host' => 'sql101.infinityfree.com',
         'user' => 'if0_40800486',
-        'pass' => 'REPLACE_WITH_YOUR_VPANEL_PASSWORD',
+        'pass' => '',
         'name' => 'if0_40800486_Library_Management',
+    ],
+    'mail' => [
+        'smtp_user' => '',
+        'smtp_pass' => '',
     ],
     'live_url' => 'https://sobran.lovestoblog.com/library/User/index.php',
 ];
+
+$localOverride = __DIR__ . '/app.local.php';
+if (file_exists($localOverride)) {
+    $localConfig = require $localOverride;
+    if (is_array($localConfig)) {
+        $config = array_replace_recursive($config, $localConfig);
+    }
+}
+
+return $config;
 

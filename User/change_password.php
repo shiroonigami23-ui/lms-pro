@@ -107,14 +107,15 @@ body{
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-require('email/Exception.php');
-require('email/SMTP.php');
-require('email/PHPMailer.php');
+require('../Email/Exception.php');
+require('../Email/SMTP.php');
+require('../Email/PHPMailer.php');
 
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
 if(isset($_POST['submit']))
 {
+$appConfig = require __DIR__ . '/../config/app.php';
 $name=$_POST['name'];
 $sub=$_POST['subject'];
 $email=$_POST['email'];
@@ -122,17 +123,20 @@ $message=$_POST['msg'];
 
 
     try {
+        if (empty($appConfig['mail']['smtp_user']) || empty($appConfig['mail']['smtp_pass'])) {
+            throw new Exception('SMTP not configured');
+        }
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'shiroonigami23@gmail.com';                     //SMTP username
-        $mail->Password   = 'nnxjouocvevvwcop';                               //SMTP password
+        $mail->Username   = $appConfig['mail']['smtp_user'];                     //SMTP username
+        $mail->Password   = $appConfig['mail']['smtp_pass'];                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
         //Recipients
         $mail->setFrom($email, 'Contact-us Response');
-        $mail->addAddress('shiroonigami23@gmail.com');     //Add a recipient
+        $mail->addAddress($appConfig['owner_email']);     //Add a recipient
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = $sub;

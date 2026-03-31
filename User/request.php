@@ -5,8 +5,9 @@ session_start();
 // 	die("Access denied");
 // }
 require('functions.php');
-$connection = mysqli_connect("localhost", "root", "");
-$db = mysqli_select_db($connection, "lms");
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
 ?>
 
 <!DOCTYPE html>
@@ -203,7 +204,8 @@ $author=$_POST['author_name'];
 else{
 	$query = "select quantity from books where book_no=$_GET[bn]";
 	$query_run = mysqli_query($connection, $query);
-	if($row['quantity']=0)
+    $row = mysqli_fetch_assoc($query_run);
+	if((int)$row['quantity'] === 0)
 {
 	?>
 			<script type="text/javascript">
@@ -226,20 +228,24 @@ else{
 
 function sendmail($auth,$bkn,$bn)
         {   
-        require('email/Exception.php');
-        require('email/SMTP.php');
-        require('email/PHPMailer.php');
+        global $appConfig;
+        require('../Email/Exception.php');
+        require('../Email/SMTP.php');
+        require('../Email/PHPMailer.php');
         $mail = new PHPMailer(true);
         try {
+            if (empty($appConfig['mail']['smtp_user']) || empty($appConfig['mail']['smtp_pass'])) {
+                return true;
+            }
             $mail->isSMTP();                                            //Send using SMTP
             $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'shiroonigami23@gmail.com';                     //SMTP username
-            $mail->Password   = 'nnxjouocvevvwcop';                               //SMTP password
+            $mail->Username   = $appConfig['mail']['smtp_user'];                     //SMTP username
+            $mail->Password   = $appConfig['mail']['smtp_pass'];                               //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
             //Recipients
-            $mail->setFrom('shiroonigami23@gmail.com', 'LMS Book Request');
+            $mail->setFrom($appConfig['mail']['smtp_user'], 'LMS Book Request');
             // $mail->addAddress();
             // $mail->addAddress('shiroonigami23@gmail.com');        //Add a recipient
             //Content
@@ -276,7 +282,7 @@ $auth
 <li> <b>Book Name</b> : $bkn</li>
 <li><b>Author Name</b> : $auth</li>
 <li><b>Student Name</b> : $name</li>
-<li><b>Student Roll Number</b> : $id</li>
+<li><b>Student Roll Number</b> : $roll</li>
 <li><b>Student Email</b> : $email</li>
 <li><b>Date Of Order</b> : $currentTime</li>
 </ul>
@@ -296,7 +302,7 @@ $auth
         
         $mail->clearAddresses(); // Clear previous recipient
 
-        $mail->addAddress('shiroonigami23@gmail.com', 'Admin');
+        $mail->addAddress($appConfig['owner_email'], 'Admin');
         $mail->Subject = 'Book Request'; // Set subject for recipient 2
         $mail->Body = $bodyRecipient2;
         $mail->send();

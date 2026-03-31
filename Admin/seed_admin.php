@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/database.php';
 $connection = lms_db_connect($appConfig['db']);
 
 $email = 'shiroonigami23@gmail.com';
-$password = 'shiro';
+$password = 'Shiro';
 $name = 'Shiro Admin';
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 

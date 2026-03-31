@@ -15,37 +15,44 @@
 
 <?php
 session_start();
-$connection = mysqli_connect("localhost","root","");
-$db = mysqli_select_db($connection,"lms");
-$sql="select * from users where email='$_POST[email]'";
-$result=mysqli_query($connection,$sql);
-$present=mysqli_num_rows($result);
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$email = mysqli_real_escape_string($connection, $_POST['email']);
+$sql = "select * from users where email='$email' limit 1";
+$result = mysqli_query($connection, $sql);
+$present = mysqli_num_rows($result);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 function sendmail($email,$v_code)
 {
-	require('email/Exception.php');
-require('email/SMTP.php');
-require('email/PHPMailer.php');
+	global $appConfig;
+	require('../Email/Exception.php');
+require('../Email/SMTP.php');
+require('../Email/PHPMailer.php');
 $mail = new PHPMailer(true);
 try {
+	if (empty($appConfig['mail']['smtp_user']) || empty($appConfig['mail']['smtp_pass'])) {
+		return false;
+	}
 	$mail->isSMTP();                                            //Send using SMTP
 	$mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
 	$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-	$mail->Username   = 'shiroonigami23@gmail.com';                     //SMTP username
-	$mail->Password   = 'nnxjouocvevvwcop';                               //SMTP password
+	$mail->Username   = $appConfig['mail']['smtp_user'];                     //SMTP username
+	$mail->Password   = $appConfig['mail']['smtp_pass'];                               //SMTP password
 	$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 	$mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 	//Recipients
-	$mail->setFrom('shiroonigami23@gmail.com', 'Email Verification');
+	$mail->setFrom($appConfig['mail']['smtp_user'], 'Email Verification');
 	$mail->addAddress($email);     //Add a recipient
 	//Content
 	$mail->isHTML(true);                                  //Set email format to HTML
 	$mail->Subject = 'LMS Email Verification';
+	$verifyBase = rtrim(dirname($appConfig['live_url']), '/');
 	$mail->Body    = "Hey User ,  Your Verification link is here ,Please Click on 
-	<b><a href='http://localhost/library/verify.php?email=$email&&v_code=$v_code'>Verify</a></b><br>";
+	<b><a href='$verifyBase/verify.php?email=$email&&v_code=$v_code'>Verify</a></b><br>";
 	$mail->send();
    return true;
 } catch (Exception $e) {
@@ -61,13 +68,20 @@ if($present>0)
 else{
 	
 	$v_code=bin2hex(random_bytes(16));
-	$query = "insert into users values('$_POST[id]','$_POST[name]','$_POST[course]','$_POST[department]','$_POST[email]','$_POST[password]','$v_code',0,'$_POST[mobile]','$_POST[address]')";
+	$hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+	$isVerified = 0;
+	// If SMTP is not configured, let the user in directly.
+	if (empty($appConfig['mail']['smtp_user']) || empty($appConfig['mail']['smtp_pass'])) {
+		$isVerified = 1;
+		$v_code = '';
+	}
+	$query = "insert into users values('$_POST[id]','$_POST[name]','$_POST[course]','$_POST[department]','$_POST[email]','$hashedPassword','$v_code',$isVerified,'$_POST[mobile]','$_POST[address]')";
 	
-	if(mysqli_query($connection,$query)&& sendmail($_POST['email'],$v_code))
+	if(mysqli_query($connection,$query) && ($isVerified === 1 || sendmail($_POST['email'],$v_code)))
 	{
 ?>
 <script type="text/javascript">
-	alert("Registration Successful , Please click on Verify email Sent to You!!!");
+	alert("Registration Successful!");
 	window.location.href = "user_login.php";
 </script>
 <?php 
