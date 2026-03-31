@@ -4,9 +4,10 @@
 	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>
 </head>
 <?php
-$connection = mysqli_connect("localhost","root","");
-$db = mysqli_select_db($connection,"lms");
-	$query = "delete from request_books where request_no=  $_GET[rn]";
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$query = "delete from request_books where request_no=  $_GET[rn]";
 	$query_run = mysqli_query($connection,$query);
 ?>
 <script type="text/javascript">

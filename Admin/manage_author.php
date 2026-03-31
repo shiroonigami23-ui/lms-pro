@@ -6,9 +6,10 @@ require("functions.php");
 	die("Access denied");
 }
 	
-	$connection = mysqli_connect("localhost","root","");
-	$db = mysqli_select_db($connection,"lms");
-	$name = "";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$name = "";
 	$email = "";
 	$mobile = "";
 	$query = "select * from admins where email = '$_SESSION[email]'";

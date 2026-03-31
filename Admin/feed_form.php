@@ -96,9 +96,10 @@ Dear Dear,<?php echo $_SESSION['name'];?>  Please give response of the feedback 
 
 <?php
 if (isset($_POST['send_feed'])) {
-	$connection = mysqli_connect("localhost","root","");
-	$db = mysqli_select_db($connection,"lms");
-	$query = "update feedback set response='$_POST[feedback]' where id=$_GET[id_n]";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$query = "update feedback set response='$_POST[feedback]' where id=$_GET[id_n]";
 	$query_run = mysqli_query($connection, $query);
 	?>
 	<script type="text/javascript">

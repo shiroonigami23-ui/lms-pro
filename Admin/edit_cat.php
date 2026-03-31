@@ -5,9 +5,10 @@
 	die(include('../user/error.html'));
 }
 	
-	$connection = mysqli_connect("localhost","root","");
-	$db = mysqli_select_db($connection,"lms");
-	$cat_id = "";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$cat_id = "";
 	$cat_name = "";
 	$query = "select * from category where cat_id = $_GET[cid]";
 	$query_run = mysqli_query($connection,$query);

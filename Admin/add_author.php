@@ -5,9 +5,10 @@
 {
 	die(include('../user/error.html'));
 }
-	$connection = mysqli_connect("localhost","root","");
-	$db = mysqli_select_db($connection,"lms");
-	$name = "";
+	$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$name = "";
 	$email = "";
 	$mobile = "";
 	$query = "select * from admins where email = '$_SESSION[email]'";
@@ -108,9 +109,10 @@ Dear <?php echo $_SESSION['name'];?> , Please add the author followed by name an
 <?php
 	if(isset($_POST['add_author']))
 	{
-		$connection = mysqli_connect("localhost","root","");
-		$db = mysqli_select_db($connection,"lms");
-		$query = "insert into authors values('$_POST[author_id]','$_POST[author_name]')";
+		$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$query = "insert into authors values('$_POST[author_id]','$_POST[author_name]')";
 		$query_run = mysqli_query($connection,$query);
 		?>
 			<script type="text/javascript">

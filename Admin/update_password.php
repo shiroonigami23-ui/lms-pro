@@ -4,9 +4,10 @@
 {
 die(include('../user/error.html'));
 }
-$connection = mysqli_connect("localhost","root","");
-$db = mysqli_select_db($connection,"lms");
-	$password = "";
+$appConfig = require __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/database.php';
+$connection = lms_db_connect($appConfig['db']);
+$password = "";
 	$query = "select * from admins where email = '$_SESSION[email]'";
 	$query_run = mysqli_query($connection,$query);
 	while ($row = mysqli_fetch_assoc($query_run)){
