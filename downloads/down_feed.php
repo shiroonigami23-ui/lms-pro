@@ -8,13 +8,14 @@ if(!isset($_SESSION['email']))
 require('../pdf/fpdf.php');
 function connectDB()
 {
-     $host = 'localhost';
-    $username = 'root';
-    $password = '';
-    $dbname = 'lms';
+     $appConfig = require __DIR__ . '/../config/app.php';
+    $host = $appConfig['db']['host'];
+    $username = $appConfig['db']['user'];
+    $password = $appConfig['db']['pass'];
+    $dbname = $appConfig['db']['name'];
 
     try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+        $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
     } catch (PDOException $e) {
@@ -92,9 +93,9 @@ foreach ($availList as $avail) {
 
     $pdf->Cell(40, 10, $avail['name'], 1);
     $pdf->Cell(40, 10, $avail['roll'], 1);
-    $pdf->Cell(30, 10, $avail['feed_date'], 1);
+    $pdf->Cell(30, 10, $avail['date'], 1);
     $pdf->Cell(30, 10, $avail['category'], 1);
-    $pdf->Cell(30, 10, $avail['message'], 1);
+    $pdf->Cell(30, 10, $avail['feedback'], 1);
     $pdf->Ln();
 }
 $pdf->Output('Feedbacks.pdf', 'I');

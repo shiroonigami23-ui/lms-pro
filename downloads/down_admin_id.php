@@ -8,13 +8,14 @@ if(!isset($_SESSION['email']))
 require('../pdf/fpdf.php');
 function connectDB()
 {
-          $host = 'localhost';
-    $username = 'root';
-    $password = '';
-    $dbname = 'lms';
+          $appConfig = require __DIR__ . '/../config/app.php';
+    $host = $appConfig['db']['host'];
+    $username = $appConfig['db']['user'];
+    $password = $appConfig['db']['pass'];
+    $dbname = $appConfig['db']['name'];
 
     try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+        $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
     } catch (PDOException $e) {
@@ -25,7 +26,7 @@ function connectDB()
 function getAdminData()
 {
     $conn = connectDB();
-    $stmt = $conn->prepare("select name,role,email,mobile from admins where email='$_SESSION[email]'");
+    $stmt = $conn->prepare("select name,email,mobile from admins where email='$_SESSION[email]'");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
@@ -64,9 +65,6 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(95, 10, 'Mobile NO: ', 1, 0, 'C');
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(95, 10, $userList[0]['mobile'], 1, 1, 'C');
-$pdf->Cell(95, 10, 'Role: ', 1, 0, 'C');
-$pdf->SetFont('Arial', '', 12);
-$pdf->Cell(95, 10, $userList[0]['role'], 1, 1, 'C');
 $pdf->SetFont('Arial', '', 12);
 $pdf->SetLineWidth(0.5);
 

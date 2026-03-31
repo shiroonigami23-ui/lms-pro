@@ -9,13 +9,14 @@ if(!isset($_SESSION['email']))
 require('../pdf/fpdf.php');
 function connectDB()
 {
-    $host = 'localhost';
-    $username = 'root';
-    $password = '';
-    $dbname = 'lms';
+    $appConfig = require __DIR__ . '/../config/app.php';
+    $host = $appConfig['db']['host'];
+    $username = $appConfig['db']['user'];
+    $password = $appConfig['db']['pass'];
+    $dbname = $appConfig['db']['name'];
 
     try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+        $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
     } catch (PDOException $e) {
