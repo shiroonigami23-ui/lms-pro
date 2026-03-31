@@ -2,7 +2,7 @@
 $appConfig = require __DIR__ . '/app.php';
 $dbConfig = $appConfig['db'];
 
-function lms_db_connect(array $dbConfig): mysqli
+function lms_db_connect(array $dbConfig)
 {
     $connection = mysqli_connect($dbConfig['host'], $dbConfig['user'], $dbConfig['pass']);
     if (!$connection) {
