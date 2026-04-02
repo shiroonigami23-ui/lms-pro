@@ -35,14 +35,14 @@ LMS Pro is a responsive PHP + MySQL library management system with dedicated use
 - JavaScript
 
 ## Project Structure
-
+```
 - `Admin/` - admin portal modules.
 - `User/` - user-facing portal modules.
 - `config/` - centralized app and database configuration.
 - `database/` - SQL patch and optimization scripts.
 - `deploy/` - hosting setup checklist.
 - `builds/` - APK/EXE wrapper build guidance.
-
+```
 ## Deployment (InfinityFree, Subfolder)
 
 Target path: `htdocs/library`
