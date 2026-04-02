@@ -11,7 +11,7 @@
 
 ## Live URL
 
-`https://sobran.lovestoblog.com/library/User/index.php`
+[https://Shirooni_Library_System](https://sobran.lovestoblog.com/library/)
 
 ## Overview
 
