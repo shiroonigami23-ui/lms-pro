@@ -1,0 +1,15 @@
+{
+  "name": "LMS Pro \u2014 Library Management System",
+  "image": "mcr.microsoft.com/devcontainers/java:1-17",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client"
+      ]
+    }
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y php-mysql || true",
+  "forwardPorts": [
+    8000
+  ]
+}
