@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.gif" alt="LMS Pro — Library Management System animated banner" width="100%">
+<img src="lms_demo.gif" alt="LMS Pro — Library Management System" width="100%">
 
 # 📖 LMS Pro — Library Management System
 
@@ -17,10 +17,6 @@
 </div>
 
 ---
-
-## 📸 Preview
-
-<p align="center"><img src="lms_demo.gif" alt="LMS Pro — Library Management System preview" width="85%"></p>
 
 ## 📖 Overview
 
